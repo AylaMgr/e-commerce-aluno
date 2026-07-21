@@ -79,5 +79,15 @@ constructor(){
 }
 //! Metodo para criar um estado de seleção com signal string | null
 produtoSelecionado = signal <string | null>(null);
+//! Metodo para criar um estado de carrinho com signal
+carrinho = signal <{nome: string, preco: number}[]>([]);
 
+adicionarAoCarrinho(produto: { nome: string, preco: number }){
+  this.carrinho.update(listaAtual => [...listaAtual, produto]);
+}
+//!metodo para calcular a quantidade total de itens no carrinho usando computed()
+quantidadeCarrinho = computed(() => this.carrinho().length);
+//!metodo para calcular o valor total dos itens no carrinho usando computed()
+totalCarrinho = computed(() => {
+  return this.carrinho().reduce((total, item) => total + item.preco, 0)});
 }
