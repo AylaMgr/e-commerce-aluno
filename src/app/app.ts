@@ -11,5 +11,5 @@ import {UpperCasePipe} from '@angular/common';
 })
 export class App {
   protected readonly title = signal('e-commerce-aluno');
-  nomeLoja = 'Loja sem Bugs';
+  nomeLoja = 'Loja: Confia em mim, Não é golpe!';
 }
