@@ -5,6 +5,7 @@ import { computed } from '@angular/core';
 import { PrecoFormatadoPipe } from '../../../shared/pipes/preco-formatado-pipe';
 import { effect } from '@angular/core';
 import { UpperCasePipe } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-lista-produtos',
@@ -13,29 +14,9 @@ import { UpperCasePipe } from '@angular/common';
   styleUrl: './lista-produtos.css',
 })
 export class ListaProdutos {
- //!Lista com dados - Array
-  produtos = signal([
-    { 
-      nome: 'Teclado Gamer', 
-      preco:149.00
-    },
-    {
-      nome: 'Mouse Gamer', 
-      preco:299.99
-    },
-    {
-      nome: 'Monitor Gamer', 
-      preco:1599.99
-    },
-    {
-      nome: 'Desktop Gamer', 
-      preco:4999.99
-    },
-    {
-      nome: 'Headset Gamer', 
-      preco:699.99
-    }
-  ]);
+ //!signal
+  produtos = signal<{nome: string; preco: number}[]>([]);
+    carregando = signal(true);
 //!Função para exibir produtos selecionados pelo usuario no console
   exibirProduto (nome: string){
     console.log ('Produto Selecionado: ', nome);
@@ -64,7 +45,9 @@ export class ListaProdutos {
     ]);
   }
 //! metodo para monitorar alterações em tempo real usando effect() 
-constructor(){
+constructor(private http: HttpClient){
+
+  this.carregarProdutos();
   effect(() => {
     console.log('Lista de Produtos Alterados: ', this.produtos());
   });
@@ -90,4 +73,23 @@ quantidadeCarrinho = computed(() => this.carrinho().length);
 //!metodo para calcular o valor total dos itens no carrinho usando computed()
 totalCarrinho = computed(() => {
   return this.carrinho().reduce((total, item) => total + item.preco, 0)});
+
+  carregarProdutos(){
+    this.carregando.set(true);
+    this.http.get<{title: string; price: number}[]>
+    ('https://fakestoreapi.com/products').subscribe({
+      next: (dados) => {
+        const produtosFormatados = dados.map(p =>({
+          nome: p.title,
+          preco: p.price,
+        }));
+        this.produtos.set(produtosFormatados);
+        this.carregando.set(false);
+      },
+      error: (erro) => {
+        console.error('Erro ao carregar produto:', erro);
+        this.carregando.set(false);
+      }
+    });
+  }
 }
