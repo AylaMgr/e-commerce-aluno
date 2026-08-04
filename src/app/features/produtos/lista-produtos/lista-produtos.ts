@@ -17,8 +17,9 @@ import { Inject } from '@angular/core';
 })
 export class ListaProdutos {
  //!signal
-  produtos = signal<{nome: string; preco: number}[]>([]);
-    carregando = signal(true);
+      error = signal<string | null>(null);
+      produtos = signal<{nome: string; preco: number}[]>([]);
+      carregando = signal(true);
 //!Função para exibir produtos selecionados pelo usuario no console
   exibirProduto (nome: string){
     console.log ('Produto Selecionado: ', nome);
@@ -83,7 +84,8 @@ totalCarrinho = computed(() => {
   return this.carrinho().reduce((total, item) => total + item.preco, 0)});
 
   carregarProdutos(){
-    this.carregando.set(true);
+    this.error.set(null);//!limpar o erro antes de iniciar a requisição
+    this.carregando.set(true);//!ativar o sinal de carregamento antes de iniciar a requisição
     this.produtosService.buscarProdutos().subscribe({
       next:(dados) => {
         const produtos = this.produtosService.transFormarProdutos(dados);
@@ -92,6 +94,7 @@ totalCarrinho = computed(() => {
       },
       error: (erro) => {
         console.error('erro ao carregar produtos:', erro);
+        this.error.set('Erro ao carregar produtos. Por favor, tente novamente!');
         this.carregando.set(false);
       }
     });
