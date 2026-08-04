@@ -1,11 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Produto } from '../produto/produto';
 import { signal } from '@angular/core';
 import { computed } from '@angular/core';
 import { PrecoFormatadoPipe } from '../../../shared/pipes/preco-formatado-pipe';
 import { effect } from '@angular/core';
 import { UpperCasePipe } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
+import { produtosService } from '../produto/produtos-service';
+import { Inject } from '@angular/core';
+
 
 @Component({
   selector: 'app-lista-produtos',
@@ -22,6 +24,12 @@ export class ListaProdutos {
     console.log ('Produto Selecionado: ', nome);
     this.produtoSelecionado.set(nome);
   }
+
+  //**=============== INJECT ======================
+
+  private produtosService = inject (produtosService);
+
+
   //! função que adicionar produto usando metodo update()
   adicionarProduto(){
     this.produtos.update(listaAtual => [...listaAtual, 
@@ -45,7 +53,7 @@ export class ListaProdutos {
     ]);
   }
 //! metodo para monitorar alterações em tempo real usando effect() 
-constructor(private http: HttpClient){
+constructor(){
 
   this.carregarProdutos();
   effect(() => {
@@ -76,18 +84,14 @@ totalCarrinho = computed(() => {
 
   carregarProdutos(){
     this.carregando.set(true);
-    this.http.get<{title: string; price: number}[]>
-    ('https://fakestoreapi.com/products').subscribe({
-      next: (dados) => {
-        const produtosFormatados = dados.map(p =>({
-          nome: p.title,
-          preco: p.price,
-        }));
-        this.produtos.set(produtosFormatados);
+    this.produtosService.buscarProdutos().subscribe({
+      next:(dados) => {
+        const produtos = this.produtosService.transFormarProdutos(dados);
+        this.produtos.set(produtos);
         this.carregando.set(false);
       },
       error: (erro) => {
-        console.error('Erro ao carregar produto:', erro);
+        console.error('erro ao carregar produtos:', erro);
         this.carregando.set(false);
       }
     });
