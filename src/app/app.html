@@ -1,7 +1,12 @@
 <app-header></app-header>
-<hr />
-<button mat-raised-button color="primary" (click)="login()">Login</button>
-<button mat-raised-button color="accent" (click)="logout()">Logout</button>
-<p>Status {{usuarioLogado() ? 'Logado' : 'Deslogado'}}</p>
-<hr>
+<main class ="conteiner-principal">
+
+<section class ="bloco-controle">
+  <button mat-raised-button color="primary" (click)="login()">Login</button>
+  <button mat-raised-button color="accent" (click)="logout()">Logout</button>
+  <p>Status {{usuarioLogado() ? 'Logado' : 'Deslogado'}}</p>
+</section>
+
 <router-outlet></router-outlet>
+
+</main>
