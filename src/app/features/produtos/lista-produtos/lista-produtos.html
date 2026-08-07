@@ -33,7 +33,7 @@
 }
 @if(!carregando() && ! error () ){
     <p><strong>Quantidade de Produtos:</strong>{{totalProdutos()}}</p>
-    <hr>
+<section class="grid-produtos">
     @for (item of produtos(); track $index){
         <app-produto 
         [nome] = "item.nome" 
@@ -43,12 +43,12 @@
         >
         </app-produto>
     }
-
+</section>
 }
 <h2>carrinho</h2>
 @for (item of carrinho(); track $index){
     <p>{{item.nome}} - {{item.preco | precoFormatado}}</p>
 }
-<hr>
+
 <p><strong>Quant de Itens:</strong> {{ quantidadeCarrinho() }}</p>
     <P><strong>Valor Total do Carrinho:</strong> {{ totalCarrinho() |precoFormatado }}</P>
