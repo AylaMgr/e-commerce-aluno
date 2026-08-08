@@ -2,7 +2,8 @@ import { Component, signal, computed, effect, inject } from '@angular/core';
 import { Produto } from '../produto/produto';
 import { PrecoFormatadoPipe } from '../../../shared/pipes/preco-formatado-pipe';
 import { UpperCasePipe } from '@angular/common';
-import { produtosService } from '../produto/produtos-service';
+import { produtosService } from '../../../core/services/produtos-service';
+import { carrinhoService } from '../../../core/services/carrinho.service';
 
 
 @Component({
@@ -18,7 +19,7 @@ export class ListaProdutos {
       produtos = signal<{nome: string; preco: number}[]>([]);
       carregando = signal(true);
       produtoSelecionado = signal <string | null>(null);
-      carrinho = signal <{nome: string, preco: number}[]>([]);
+      
 
 //!Função para exibir produtos selecionados pelo usuario no console
   exibirProduto (nome: string){
@@ -29,7 +30,10 @@ export class ListaProdutos {
   //!=============== INJECT ======================
 
   private produtosService = inject (produtosService);
+  public carrinhoService = inject (carrinhoService);
 
+  quantidadeCarrinho = this.carrinhoService.quantidadeItens;
+  totalCarrinho = this.carrinhoService.totalItens;
 
   //! função que adicionar produto usando metodo update()
   adicionarProduto(){
@@ -43,11 +47,6 @@ export class ListaProdutos {
   valorTotal = computed(() =>
   {return this.produtos().reduce((total, item) =>
   total + item.preco,0)});
-  
-  quantidadeCarrinho = computed(() => this.carrinho().length);
-  
-  totalCarrinho = computed(() => {
-  return this.carrinho().reduce((total, item) => total + item.preco, 0)});
 
   //!função para substituir a lista atual usando o metodo set()
   substituirProdutos(){
@@ -79,7 +78,7 @@ constructor(){
   });
 }
 adicionarAoCarrinho(produto: { nome: string, preco: number }){
-  this.carrinho.update(listaAtual => [...listaAtual, produto]);
+    this.carrinhoService.adicionar(produto);
 }
   carregarProdutos(){
     this.error.set(null);//!limpar o erro antes de iniciar a requisição
