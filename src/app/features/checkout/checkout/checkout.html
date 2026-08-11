@@ -1,0 +1,7 @@
+<h2>Checkout</h2>
+<form [formGroup] = "formulario">
+    <p><input type= "text" formControlName="nome" placeholder="Digite seu Nome: "></p>
+    <p><input type= "text" formControlName="email" placeholder="Digite seu Email: "></p>
+    <p><input type= "text" formControlName="endereco" placeholder="Digite seu Endereço: "></p>
+    <button type="button" (click)="finalizar()">Finalizar Compra</button>
+</form>
