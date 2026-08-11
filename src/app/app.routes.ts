@@ -18,8 +18,13 @@ export const routes: Routes = [
         path: 'carrinho',
         canActivate: [authGuard], //para acessar a rota do carrinho, o usuário precisa estar logado, caso contrário, ele será redirecionado para a página de login
         loadComponent: () =>
-            import('./feactures/carrinho/carrinho/carrinho')
+            import('./features/carrinho/carrinho/carrinho')
         .then((m) => m.Carrinho),
+    },
+    {
+        path: 'checkout',
+        loadComponent: () =>
+            import('./features/checkout/checkout/checkout').then((m) => m.Checkout),
     },
     {
         path: '**',
