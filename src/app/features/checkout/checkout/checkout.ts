@@ -1,6 +1,8 @@
 import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
-import { carrinhoService } from '../../../core/services/carrinho.service';
+import { Validators, AbstractControl, ValidationErrors } from '@angular/forms';
+import { CarrinhoService } from '../../../core/services/carrinho.service';
+
 
 @Component({
   selector: 'app-checkout',
@@ -9,16 +11,33 @@ import { carrinhoService } from '../../../core/services/carrinho.service';
   styleUrl: './checkout.css',
 })
 export class Checkout {
-  carrinhoService = inject(carrinhoService);
+  carrinhoService = inject(CarrinhoService);
 
   formulario = new FormGroup({
-    nome: new FormControl(''),
-    email: new FormControl(''),
-    endereco: new FormControl('')
+    nome: new FormControl('', [Validators.required, Validators.minLength(2), nomeSemNumeros]),
+    email: new FormControl('', [Validators.required, Validators.email]),
+    endereco: new FormControl('', [Validators.required, Validators.minLength(5)]),
   });
 
   finalizar(){
-    console.log('Dados do Formulario: ', this.formulario.value);
-    console.log('Dados do Carrinho: ', this.carrinhoService.itens());
+
+if (this.formulario.invalid){
+  console.log('Formulário Inválido!');
+  return;
+}
+
+const dados = this.formulario.value;
+const itens = this.carrinhoService.itens();
+
+    console.log('Dados do Formulario: ', dados);
+    console.log('Itens do Carrinho: ', itens);
   }
+}
+function nomeSemNumeros(controle: AbstractControl): ValidationErrors | null {
+const valor = controle.value;
+if (!valor) return null;
+if (/\d/.test(valor)){
+  return {numeroInvalido: true};
+}
+return null;
 }
