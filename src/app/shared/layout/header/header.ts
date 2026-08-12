@@ -2,7 +2,7 @@ import { Component, inject} from '@angular/core';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatButtonModule} from '@angular/material/button';
 import {RouterLink} from '@angular/router';
-import { carrinhoService } from '../../../core/services/carrinho.service';
+import { CarrinhoService } from '../../../core/services/carrinho.service';
 
 @Component({
   selector: 'app-header',
@@ -12,6 +12,6 @@ import { carrinhoService } from '../../../core/services/carrinho.service';
 })
 export class Header {
   nomeLoja = 'Não é golpe, confia!';
-  private carrinhoService = inject(carrinhoService);
+  private carrinhoService = inject(CarrinhoService);
   quantidadeHeader = this.carrinhoService.quantidadeItens;
 }

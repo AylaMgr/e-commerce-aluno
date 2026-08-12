@@ -2,7 +2,7 @@ import {Injectable, signal, computed} from '@angular/core';
 
 @Injectable({providedIn: 'root'})
 
-export class carrinhoService {
+export class CarrinhoService {
     //!estado global do carrinho
     private carrinho = signal<{nome: string; preco: number}[]>([]);
 

@@ -3,7 +3,7 @@ import { Produto } from '../produto/produto';
 import { PrecoFormatadoPipe } from '../../../shared/pipes/preco-formatado-pipe';
 import { UpperCasePipe } from '@angular/common';
 import { produtosService } from '../../../core/services/produtos-service';
-import { carrinhoService } from '../../../core/services/carrinho.service';
+import { CarrinhoService } from '../../../core/services/carrinho.service';
 
 
 @Component({
@@ -30,7 +30,7 @@ export class ListaProdutos {
   //!=============== INJECT ======================
 
   private produtosService = inject (produtosService);
-  public carrinhoService = inject (carrinhoService);
+  public carrinhoService = inject (CarrinhoService);
 
   quantidadeCarrinho = this.carrinhoService.quantidadeItens;
   totalCarrinho = this.carrinhoService.totalItens;
