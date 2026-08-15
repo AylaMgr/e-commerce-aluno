@@ -1,5 +1,6 @@
 import {Routes} from '@angular/router';
 import {authGuard} from './core/auth.guard';
+import { adminGuard } from './core/admin.guard';
 //criando as rotas do projeto, para cada rota, será carregado um componente diferente, e cada componente será carregado de forma assíncrona, ou seja, somente quando o usuário acessar a rota correspondente.
 export const routes: Routes = [
     {
@@ -23,8 +24,19 @@ export const routes: Routes = [
     },
     {
         path: 'checkout',
+        canActivate: [authGuard],
         loadComponent: () =>
             import('./features/checkout/checkout/checkout').then((m) => m.Checkout),
+    },
+    {
+        path:'login',
+        loadComponent:() => import('./features/login/login/login').then((m) => m.Login),
+    },
+    {
+        path: 'admin',
+        canActivate: [adminGuard],
+        loadComponent: () =>
+            import('./features/admin/admin/admin').then((m) => m.Admin),
     },
     {
         path: '**',
