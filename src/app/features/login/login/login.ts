@@ -10,8 +10,8 @@ import { AuthService } from '../../../core/services/auth.service';
   styleUrl: './login.css',
 })
 export class Login {
-  authService = inject(AuthService);
-  router = inject(Router);
+  private authService = inject(AuthService);
+  private router = inject(Router);
 
   erroLogin = signal(false);
 
