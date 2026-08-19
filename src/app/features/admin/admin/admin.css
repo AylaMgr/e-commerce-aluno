@@ -10,10 +10,10 @@ p {
 .cards-admin{
     display: grid;
     grid-template-columns: 1fr;
-    gap: 16px;
+    gap: 16px 0;
     margin: 16px 0;
 }
-.cards-admin article{
+.cards-admin article {
     border: 1px solid #ccc;
     border-radius: 10px;
     padding: 16px;
